@@ -46,8 +46,9 @@ class Document {
 
 	function write() {
 		if (php_sapi_name() === "cli") {
+			echo $this->getTitle() . "\n";
 			foreach ($this->items as $item) {
-				echo $item;
+				echo $item . "\n";
 			}
 		} else {
 			?>
