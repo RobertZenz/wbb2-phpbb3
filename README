@@ -1,0 +1,44 @@
+WBB2-PHPBB3
+-----------
+
+A convert for WoltLab Burning Board 2 to PHPBB3.
+
+
+Dependencies
+------------
+
+ * PHP 5.3
+   * PDO
+ * [PHPBB STK (Support Toolkit)](https://www.phpbb.com/customise/db/official_tool/stk/)
+
+
+Usage
+-----
+
+Just copy everything onto your server, edit the file `DatabaseFactory.php` to
+match your settings and run the scripts in in the following order:
+
+ * forums.php
+ * topics.php
+ * posts.php
+ * messages.php
+ * users.php
+ * statistics.php
+
+Now got to the STK and run the following jobs:
+
+ * Support Tools -> Orphaned Posts (check if everything imported correctly)
+ * Support Tools -> Fix Left/Right IDs (just to be sure)
+ * Support Tools -> Reclean usernames
+ * Admin Tools -> Reparse BBCodes (check the box to reparse everything)
+
+This should have done the trick.
+
+
+Downsides:
+---------
+
+ * All users will lose profile information
+ * No avatars
+ * All users need to reset their passwords
+
