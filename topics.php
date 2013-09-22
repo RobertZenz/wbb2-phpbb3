@@ -87,7 +87,7 @@ while($row = $get->fetch(PDO::FETCH_ASSOC)) {
 	$insert->bindParam(":firstPostId", $row["firstPostID"]);
 	$insert->bindParam(":firstPostName", $row["username"]);
 	$insert->bindParam(":lastPostId", $row["lastPostID"]);
-	$insert->bindParam(":lastPosterId", $row["lastPosterID"]);
+	$insert->bindParam(":lastPosterId", DatabaseFactory::modUserId($row["lastPosterID"]));
 	$insert->bindParam(":lastPosterName", $row["lastPoster"]);
 	$insert->bindParam(":lastSubject", $row["topic"]);
 	$insert->bindParam(":lastPostTime", $row["lastPostTime"]);

@@ -58,7 +58,7 @@ while ($row = $get->fetch(PDO::FETCH_ASSOC)) {
 	$insert->bindParam(":topicId", $row["threadID"]);
 	$insert->bindParam(":forumId", $row["boardID"]);
 	$insert->bindParam(":username", $row["username"]);
-	$insert->bindParam(":posterId", $row["userID"]);
+	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["userID"]));
 	$insert->bindParam(":posterIP", $row["ipAddress"]);
 	$insert->bindParam(":time", $row["time"]);
 	$insert->bindParam(":subject", $row["subject"]);
