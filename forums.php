@@ -84,7 +84,7 @@ function insertForum($parentId, $wbb, $phpbb, $sortId) {
 		$forum = $forumGet->fetch(PDO::FETCH_ASSOC);
 		$forumGet->closeCursor();
 
-		Document::getInstance()->addItem("Inserting " . $row["boardID"] . " - " . $forum["title"]);
+		Document::getInstance()->addItem($row["boardID"] . " - " . $forum["title"]);
 		
 		$insert->bindParam(":id", $forum["boardID"]);
 		$insert->bindParam(":parentId", $forum["parentID"]);
