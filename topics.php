@@ -28,6 +28,7 @@ $get = $wbb->prepare("
 		t.threadID,
 		t.boardID,
 		t.topic,
+		t.userID,
 		t.time,
 		t.views,
 		t.replies,
@@ -55,6 +56,7 @@ $insert = $phpbb->prepare("
 		topic_id = :topicId,
 		forum_id = :forumId,
 		topic_title = :title,
+		topic_poster = :posterId,
 		topic_time = :time,
 		topic_views = :views,
 		topic_replies = :replies,
@@ -78,6 +80,7 @@ while($row = $get->fetch(PDO::FETCH_ASSOC)) {
 	$insert->bindParam(":topicId", $row["threadID"]);
 	$insert->bindParam(":forumId", $row["boardID"]);
 	$insert->bindParam(":title", $row["topic"]);
+	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["userID"]));
 	$insert->bindParam(":time", $row["time"]);
 	$insert->bindParam(":views", $row["views"]);
 	$insert->bindParam(":replies", $row["replies"]);
