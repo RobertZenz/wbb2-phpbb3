@@ -95,6 +95,23 @@ $phpbb->exec("
 		f.forum_topics_real = f.forum_topics;
 ");
 
+Document::getInstance()->addItem("Rebuilding topics_posted table");
+$phpbb->exec("
+	TRUNCATE TABLE " . DatabaseFactory::PHPBB_TABLE_PREFIX . "topics_posted;
+
+	INSERT INTO
+		" . DatabaseFactory::PHPBB_TABLE_PREFIX . "topics_posted
+	SELECT
+		poster_id,
+		topic_id,
+		TRUE
+	FROM
+		" . DatabaseFactory::PHPBB_TABLE_PREFIX . "posts
+	GROUP BY
+		poster_id,
+		topic_id;
+");
+
 Document::getInstance()->write();
 
 ?>
