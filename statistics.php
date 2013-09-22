@@ -112,6 +112,21 @@ $phpbb->exec("
 		topic_id;
 ");
 
+Document::getInstance()->addItem("Fixing user post count");
+$phpbb->exec("
+	UPDATE
+		" . DatabaseFactory::PHPBB_TABLE_PREFIX . "users AS u
+	SET
+		user_posts = (
+			SELECT
+				COUNT(p.post_id)
+			FROM
+				" . DatabaseFactory::PHPBB_TABLE_PREFIX . "posts AS p
+			WHERE
+				p.poster_id = u.user_id
+		);
+");
+
 Document::getInstance()->write();
 
 ?>
