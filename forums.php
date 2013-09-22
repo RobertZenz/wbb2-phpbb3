@@ -131,11 +131,10 @@ $wbb = DatabaseFactory::getWbbConnection();
 $phpbb = DatabaseFactory::getPhpbbConnection();
 Document::getInstance()->setTitle("Forums");
 
-Document::getInstance()->addItem("Truncating table");
-// Reset the table.
+Document::getInstance()->addItem("Truncating table \"forums\"");
 $phpbb->query("
 	TRUNCATE TABLE
-		phpbb_forums;
+		" . DatabaseFactory::PHPBB_TABLE_PREFIX . "forums;
 ");
 
 insertForum(0, $wbb, $phpbb, 1);
