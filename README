@@ -41,4 +41,5 @@ Downsides:
  * All users will lose profile information
  * No avatars
  * All users need to reset their passwords
+ * No import of (any) permissions
 
