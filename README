@@ -1,7 +1,7 @@
 WBB2-PHPBB3
------------
+===========
 
-A convert for WoltLab Burning Board 2 to PHPBB3.
+A coulple of converter scripts for WoltLab Burning Board Lite 2 (2.1?) to PHPBB3.
 
 
 Dependencies
@@ -16,7 +16,7 @@ Usage
 -----
 
 Just copy everything onto your server, edit the file `DatabaseFactory.php` to
-match your settings and run the scripts in in the following order:
+match your settings and run the scripts in the following order:
 
  * forums.php
  * topics.php
@@ -35,11 +35,21 @@ Now got to the STK and run the following jobs:
 This should have done the trick.
 
 
-Downsides:
+What you get
+------------
+
+ * Categories
+ * Topics
+ * Posts
+ * Users
+
+
+Downsides
 ---------
 
  * All users will lose profile information
  * No avatars
  * All users need to reset their passwords
  * No import of (any) permissions
+ * No statistics
 
