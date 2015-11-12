@@ -39,13 +39,13 @@ $phpbb->query("
 
 $get = $wbb->prepare("
 	SELECT
-		userID,
+		userid,
 		username,
 		email,
 		signature,
-		registrationDate
+		regdate
 	FROM
-		" . DatabaseFactory::WCF_TABLE_REPFIX . "user
+		" . DatabaseFactory::WCF_TABLE_REPFIX . "users
 	WHERE
 		userID > 1;
 ");
@@ -74,21 +74,21 @@ $insertGroup = $phpbb->prepare("
 
 $get->execute();
 while($row = $get->fetch(PDO::FETCH_ASSOC)) {
-	Document::getInstance()->addItem($row["userID"] . " - " . $row["username"]);
+	Document::getInstance()->addItem($row["userid"] . " - " . $row["username"]);
 	
-	$insert->bindParam(":id", DatabaseFactory::modUserId($row["userID"]));
+	$insert->bindParam(":id", DatabaseFactory::modUserId($row["userid"]));
 	$insert->bindParam(":type", $userTypeNormal);
 	$insert->bindParam(":group", $defaultGroup);
 	$insert->bindParam(":username", $row["username"]);
 	$insert->bindParam(":usernameClean", $row["username"]);
 	$insert->bindParam(":email", $row["email"]);
 	$insert->bindParam(":signature", $row["signature"]);
-	$insert->bindParam(":registrationDate", $row["registrationDate"]);
+	$insert->bindParam(":registrationDate", $row["regdate"]);
 	$insert->execute();
 	$insert->closeCursor();
 	
 	$insertGroup->bindParam(":groupId", $defaultGroup);
-	$insertGroup->bindParam(":userId", DatabaseFactory::modUserId($row["userID"]));
+	$insertGroup->bindParam(":userId", DatabaseFactory::modUserId($row["userid"]));
 	$insertGroup->execute();
 	$insertGroup->closeCursor();
 }

@@ -25,28 +25,28 @@ $phpbb->query("
 
 $get = $wbb->prepare("
 	SELECT
-		t.threadID,
-		t.boardID,
+		t.threadid,
+		t.boardid,
 		t.topic,
-		t.userID,
-		t.time,
+		t.starterid,
+		t.starttime,
 		t.views,
-		t.replies,
-		t.isSticky,
-		t.isClosed,
-		t.firstPostID,
-		t.username,
-		MAX(p.postID) AS 'lastPostID',
-		t.lastPosterID,
-		t.lastPoster,
-		t.lastPostTime
+		t.replycount,
+		t.important,
+		t.closed,
+		MIN(p.postid) AS 'firstpostid',
+		t.starter,
+		MAX(p.postID) AS 'lastpostid',
+		t.lastposterid,
+		t.lastposter,
+		t.lastposttime
 	FROM
-		" . DatabaseFactory::WBB_TABLE_REPFIX . "thread AS t
-		LEFT JOIN " . DatabaseFactory::WBB_TABLE_REPFIX . "post AS p ON t.threadID = p.threadID AND p.isDeleted = FALSE
+		" . DatabaseFactory::WBB_TABLE_REPFIX . "threads AS t
+		LEFT JOIN " . DatabaseFactory::WBB_TABLE_REPFIX . "posts AS p ON t.threadid = p.threadid AND p.visible = TRUE
 	WHERE
-		t.isDeleted = FALSE
+		t.visible = TRUE
 	GROUP BY
-		t.threadID;
+		t.threadid;
 ");
 		
 $insert = $phpbb->prepare("
@@ -75,26 +75,26 @@ $insert = $phpbb->prepare("
 
 $get->execute();
 while($row = $get->fetch(PDO::FETCH_ASSOC)) {
-	Document::getInstance()->addItem($row["threadID"] . " - " . $row["topic"]);
+	Document::getInstance()->addItem($row["threadid"] . " - " . $row["topic"]);
 	
-	$insert->bindParam(":topicId", $row["threadID"]);
-	$insert->bindParam(":forumId", $row["boardID"]);
+	$insert->bindParam(":topicId", $row["threadid"]);
+	$insert->bindParam(":forumId", $row["boardid"]);
 	$insert->bindParam(":title", $row["topic"]);
-	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["userID"]));
-	$insert->bindParam(":time", $row["time"]);
+	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["startid"]));
+	$insert->bindParam(":time", $row["starttime"]);
 	$insert->bindParam(":views", $row["views"]);
-	$insert->bindParam(":replies", $row["replies"]);
-	$insert->bindParam(":repliesReal", $row["replies"]);
-	$insert->bindParam(":status", $row["isClosed"]);
-	$insert->bindParam(":type", getStatus($row["isSticky"]));
-	$insert->bindParam(":firstPostId", $row["firstPostID"]);
-	$insert->bindParam(":firstPostName", $row["username"]);
-	$insert->bindParam(":lastPostId", $row["lastPostID"]);
-	$insert->bindParam(":lastPosterId", DatabaseFactory::modUserId($row["lastPosterID"]));
-	$insert->bindParam(":lastPosterName", $row["lastPoster"]);
+	$insert->bindParam(":replies", $row["replycount"]);
+	$insert->bindParam(":repliesReal", $row["replycount"]);
+	$insert->bindParam(":status", $row["closed"]);
+	$insert->bindParam(":type", getStatus($row["important"]));
+	$insert->bindParam(":firstPostId", $row["firstpostid"]);
+	$insert->bindParam(":firstPostName", $row["firstposter"]);
+	$insert->bindParam(":lastPostId", $row["lastpostid"]);
+	$insert->bindParam(":lastPosterId", DatabaseFactory::modUserId($row["lastposterid"]));
+	$insert->bindParam(":lastPosterName", $row["lastposter"]);
 	$insert->bindParam(":lastSubject", $row["topic"]);
-	$insert->bindParam(":lastPostTime", $row["lastPostTime"]);
-	$insert->bindParam(":lastViewTime", $row["lastPostTime"]);
+	$insert->bindParam(":lastPostTime", $row["lastposttime"]);
+	$insert->bindParam(":lastViewTime", $row["lastposttime"]);
 	$insert->execute();
 	$insert->closeCursor();
 }

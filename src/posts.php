@@ -18,20 +18,20 @@ $phpbb->query("
 
 $get = $wbb->prepare("
 	SELECT
-		p.postID,
-		p.threadID,
-		t.boardID,
-		p.userID,
+		p.postid,
+		p.threadid,
+		t.boardid,
+		p.userid,
 		p.username,
-		p.ipAddress,
-		p.time,
-		p.subject,
+		p.ipaddress,
+		p.posttime,
+		p.posttopic,
 		p.message
 	FROM
-		" . DatabaseFactory::WBB_TABLE_REPFIX . "post AS p
-		LEFT JOIN " . DatabaseFactory::WBB_TABLE_REPFIX . "thread AS t ON p.threadID = t.threadID
+		" . DatabaseFactory::WBB_TABLE_REPFIX . "posts AS p
+		LEFT JOIN " . DatabaseFactory::WBB_TABLE_REPFIX . "threads AS t ON p.threadid = t.threadid
 	WHERE
-		p.isDeleted = FALSE;
+		p.visible = TRUE;
 ");
 
 $insert = $phpbb->prepare("
@@ -52,16 +52,16 @@ $insert = $phpbb->prepare("
 
 $get->execute();
 while ($row = $get->fetch(PDO::FETCH_ASSOC)) {
-	Document::getInstance()->addItem($row["postID"] . " - " . $row["subject"]);
+	Document::getInstance()->addItem($row["postid"] . " - " . $row["subject"]);
 
-	$insert->bindParam(":postId", $row["postID"]);
-	$insert->bindParam(":topicId", $row["threadID"]);
-	$insert->bindParam(":forumId", $row["boardID"]);
+	$insert->bindParam(":postId", $row["postid"]);
+	$insert->bindParam(":topicId", $row["threadid"]);
+	$insert->bindParam(":forumId", $row["boardid"]);
 	$insert->bindParam(":username", $row["username"]);
-	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["userID"]));
-	$insert->bindParam(":posterIP", $row["ipAddress"]);
-	$insert->bindParam(":time", $row["time"]);
-	$insert->bindParam(":subject", $row["subject"]);
+	$insert->bindParam(":posterId", DatabaseFactory::modUserId($row["userid"]));
+	$insert->bindParam(":posterIP", $row["ipaddress"]);
+	$insert->bindParam(":time", $row["posttime"]);
+	$insert->bindParam(":subject", $row["posttopic"]);
 	$insert->bindParam(":text", $row["message"]);
 	$insert->bindParam(":checksum", md5($row["message"]));
 	$insert->execute();

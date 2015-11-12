@@ -31,11 +31,11 @@ function getFlags($type) {
 function insertForum($parentId, $wbb, $phpbb, $sortId) {
 	$get = $wbb->prepare("
 		SELECT
-			boardID
+			boardid
 		FROM
-			" . DatabaseFactory::WBB_TABLE_REPFIX . "board_structure
+			" . DatabaseFactory::WBB_TABLE_REPFIX . "boards
 		WHERE
-			parentID = :id
+			parentid = :id
 		ORDER BY
 			position ASC;
 	");
