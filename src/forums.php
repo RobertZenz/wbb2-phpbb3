@@ -42,11 +42,11 @@ function insertForum($parentId, $wbb, $phpbb, $sortId) {
 
 	$forumGet = $wbb->prepare("
 		SELECT
-			boardID,
-			parentID,
+			boardid,
+			parentid,
 			title,
 			description,
-			boardType
+			isboard
 		FROM
 			" . DatabaseFactory::WBB_TABLE_REPFIX . "board
 		WHERE
@@ -78,28 +78,28 @@ function insertForum($parentId, $wbb, $phpbb, $sortId) {
 	$get->bindParam(":id", $parentId);
 	$get->execute();
 	
-	while ($row = $get->fetch(PDO::FETCH_ASSOC)) {	
-		$forumGet->bindParam(":id", $row["boardID"]);
+	while ($row = $get->fetch(PDO::FETCH_ASSOC)) {
+		$forumGet->bindParam(":id", $row["boardid"]);
 		$forumGet->execute();
 		$forum = $forumGet->fetch(PDO::FETCH_ASSOC);
 		$forumGet->closeCursor();
 
-		Document::getInstance()->addItem($row["boardID"] . " - " . $forum["title"]);
+		Document::getInstance()->addItem($row["boardid"] . " - " . $forum["title"]);
 		
-		$insert->bindParam(":id", $forum["boardID"]);
-		$insert->bindParam(":parentId", $forum["parentID"]);
+		$insert->bindParam(":id", $forum["boardid"]);
+		$insert->bindParam(":parentId", $forum["parentid"]);
 		$insert->bindParam(":lid", $sortId);
 		$insert->bindParam(":name", $forum["title"]);
 		$insert->bindParam(":description", $forum["description"]);
-		$insert->bindParam(":type", typeConvert($forum["boardType"]));
-		$insert->bindParam(":flags", getFlags($forum["boardType"]));
+		$insert->bindParam(":type", typeConvert($forum["isboard"]));
+		$insert->bindParam(":flags", getFlags($forum["isboard"]));
 		$insert->execute();
 		$insert->closeCursor();
 		
-		$sortId = insertForum($row["boardID"], $wbb, $phpbb, $sortId + 1);
+		$sortId = insertForum($row["boardid"], $wbb, $phpbb, $sortId + 1);
 		
 		$rightUpdate->bindParam(":rightId", $sortId);
-		$rightUpdate->bindParam(":id", $row["boardID"]);
+		$rightUpdate->bindParam(":id", $row["boardid"]);
 		$rightUpdate->execute();
 		$rightUpdate->closeCursor();
 		
