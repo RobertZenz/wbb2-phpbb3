@@ -48,7 +48,7 @@ function insertForum($parentId, $wbb, $phpbb, $sortId) {
 			description,
 			isboard
 		FROM
-			" . DatabaseFactory::WBB_TABLE_REPFIX . "board
+			" . DatabaseFactory::WBB_TABLE_REPFIX . "boards
 		WHERE
 			boardID = :id;
 	");
