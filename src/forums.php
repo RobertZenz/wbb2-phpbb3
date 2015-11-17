@@ -37,7 +37,7 @@ function insertForum($parentId, $wbb, $phpbb, $sortId) {
 		WHERE
 			parentid = :id
 		ORDER BY
-			position ASC;
+			boardorder ASC;
 	");
 
 	$forumGet = $wbb->prepare("
